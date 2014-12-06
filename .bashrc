@@ -1,4 +1,4 @@
-# Set shell to act like vim. Add set editing-mdoe vi in .inputrc for others
+# Set shell to act like vim, but keep some of the emacs bindings
 set -o vi
 bind -m vi-command ".":insert-last-argument
 bind -m vi-insert "\C-l.":clear-screen
@@ -8,6 +8,7 @@ bind -m vi-insert "\C-w.":backward-kill-word
 
 # Export some variable names
 export VIMRC='~/.vimrc'
+
 # Some handy short-cuts
 alias ll='ls -lrt'
 alias vi='vim'
