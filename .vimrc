@@ -118,15 +118,15 @@ set clipboard=unnamed
 autocmd! bufwritepost .vimrc source %
 " Easy saving of files that need root permission
 cmap w!! %!sudo tee > /dev/null %
-" Bind new set of commands
-let mapleader=","
-map <Leader>d <esc>:tabprevious<CR> 
-map <Leader>f <esc>:tabnext<CR> 
 
 " Easy indentation
 vnoremap < <gv
 vnoremap > >gv
 
+" Bind new set of commands with leader binding
+let mapleader=","
+map <Leader>d <esc>:tabprevious<CR> 
+map <Leader>f <esc>:tabnext<CR> 
 " Clear search highlight
 noremap <Leader><space> :nohls<CR>
 
@@ -136,8 +136,14 @@ map <F9> <esc>:wq<CR>
 map <F3> <esc>:q<CR>
 map! <F9> <esc>:wq<CR>
 map! <F3> <esc>:q<CR>
-" new jj this will 
-" These settings are mostly Pythonic
+
+" Easy split navigation vimbits
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Following settings are mostly Pythonic
 " Indentation settings for using 2 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
 set softtabstop=4
@@ -178,7 +184,7 @@ set wildignore+=*/coverage/*
 " cd ~/.vim/bundle
 " git clone git://github.com/davidhalter/jedi-vim.git
 let g:jedi#usages_command = "<leader>z"
-let g:jedi#popup_on_dot = 0
+let g:jedi#popup_on_dot = 1
 let g:jedi#popup_select_first = 0
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
@@ -200,6 +206,8 @@ endfunction
 inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
 inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
+" Completion menu color
+highlight Pmenu ctermbg=238 gui=bold
 
 " Python folding
 " mkdir -p ~/.vim/ftplugin
