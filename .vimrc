@@ -136,6 +136,7 @@ map <F9> <esc>:wq<CR>
 map <F3> <esc>:q<CR>
 map! <F9> <esc>:wq<CR>
 map! <F3> <esc>:q<CR>
+map <F2> <esc>:setlocal spell spelllang=en_us<CR>
 
 " Easy split navigation vimbits
 nnoremap <C-h> <C-w>h
@@ -143,6 +144,9 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Spell check highlight set underline
+highlight clear SpellBad
+highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
 " Following settings are mostly Pythonic
 " Indentation settings for using 2 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
