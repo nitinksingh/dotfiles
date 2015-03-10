@@ -15,14 +15,19 @@ alias vi='vim'
 alias find='find . -name'
 alias grepr='grep -ir'
 alias tarx='tar -xvzf'
+alias notebook='ipython notebook'
 
 # Git related aliases
 alias g='git'
 alias gs='git status'
 alias gc='git commit'
 alias gco='git checkout -b'
+alias gdis='git checkout --'
+alias gr='git reset HEAD' 
 alias gb='git branch'
 alias ga='git add'
-
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
 # Import local shortcuts
 source ~/.localrc
