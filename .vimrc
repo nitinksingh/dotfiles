@@ -1,4 +1,6 @@
-" This file is pooled from various resources some of which are mentioned.
+" shis file is pooled from various resources some of which are mentioned.
+" Attempt to follow Doug Black's, "Do not put anything in your .vimrc
+" that you do not understand" is underway
 " URL: http://vim.wikia.com/wiki/Example_vimrc
 " Authors: http://vim.wikia.com/wiki/Vim_on_Freenode
 " Description: A minimal, but feature rich, example .vimrc. If you are a
@@ -7,7 +9,7 @@
 "              on this file is still a good idea.
 
 "------------------------------------------------------------
-" Features {{{1
+" Features {{{
 "
 " These options and commands enable some very useful features in Vim, that
 " no user should have to live without.
@@ -20,31 +22,12 @@ set nocompatible
 " contents. Use this to allow intelligent auto-indenting for each filetype,
 " and for plugins that are filetype specific.
 filetype indent plugin on
+" }}}
+
 "------------------------------------------------------------
 " Must have options {{{1
 "
 " These are highly recommended options.
-
-" Vim with default settings does not allow easy switching between multiple files
-" in the same editor window. Users can use multiple split windows or multiple
-" tab pages to edit multiple files, but it is still best to enable an option to
-" allow easier switching between files.
-"
-" One such option is the 'hidden' option, which allows you to re-use the same
-" window and switch from an unsaved buffer without saving it first. Also allows
-" you to keep an undo history for multiple files when re-using the same window
-" in this way. Note that using persistent undo also lets you undo in multiple
-" files even in the same window, but is less efficient and is actually designed
-" for keeping undo history after closing Vim entirely. Vim will complain if you
-" try to quit without saving, and swap files will keep you safe if your computer
-" crashes.
-set hidden
-
-" Note that not everyone likes working this way (with the hidden option).
-" Alternatives include using tabs or split windows instead of re-using the same
-" window as mentioned above, and/or either of the following options:
-" set confirm
-" set autowriteall
 
 " Better command-line completion
 set wildmenu
@@ -52,14 +35,32 @@ set wildmenu
 " Show partial commands in the last line of the screen
 set showcmd
 
+" Set the command window height to 2 lines, to avoid many cases of having to
+" "press <Enter> to continue"
+set cmdheight=2
+
+" Display line numbers on the left
+set number
+
 " Enable syntax highlighting
 syntax on
 
+" Highlight cursor line
+set nocursorline
+
+" Show matching parenthesis
+set showmatch
+
 " Highlight seach items
 set hlsearch
+
+" Start highligting as you types the search term
+set incsearch
+
 " Ignore case except when capital case is used
 set ignorecase
 set smartcase
+
 " Allow backspacing over autoindent, line breaks and start of insert action
 set backspace=indent,eol,start
 
@@ -94,28 +95,34 @@ set t_vb=
 " Enable use of the mouse for all modes
 set mouse=a
 
-" Set the command window height to 2 lines, to avoid many cases of having to
-" "press <Enter> to continue"
-set cmdheight=2
-" Display line numbers on the left
-set number
-
 " Quickly time out on keycodes, but never time out on mappings
 " set notimeout ttimeout ttimeoutlen=200
-
-
-" More settings
-" Use <F11> to toggle between 'paste' and 'nopaste'
-set pastetoggle=<F10>
 
 " Clipboard
 set clipboard=unnamed
 
+
+"""""""""""""""""""""""""""""""""""""""
+" autocmd group 
+"""""""""""""""""""""""""""""""""""""""
+augroup configcmds
+	autocmd!
+	" Make changes effective right away
+	autocmd! bufwritepost .vimrc source %
+
+	" Strip trailing whitespaces
+	autocmd FileType c,cpp,php,python autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+	" Special tab spaces for python files
+	autocmd FileType * set tabstop=2|set shiftwidth=2|set noexpandtab
+	autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+augroup END
 """""""""""""""""""""""""""""""""""""""
 " Keyboard shortcuts
 """""""""""""""""""""""""""""""""""""""
-" Make changes effective right away
-autocmd! bufwritepost .vimrc source %
+" Use <F10> to toggle between 'paste' and 'nopaste'
+set pastetoggle=<F10>
+
 " Easy saving of files that need root permission
 cmap w!! %!sudo tee > /dev/null %
 
@@ -123,20 +130,15 @@ cmap w!! %!sudo tee > /dev/null %
 vnoremap < <gv
 vnoremap > >gv
 
-" Bind new set of commands with leader binding
-let mapleader=","
-map <Leader>d <esc>:tabprevious<CR> 
-map <Leader>f <esc>:tabnext<CR> 
-" Clear search highlight
-noremap <Leader><space> :nohls<CR>
+" Quick save in normal and insert mode
+imap jj <esc>:w<CR>a
+noremap <space>	<esc>:w<CR>
 
 " Easy write and quit
-imap jj <esc>:w<CR>a
 map <F9> <esc>:wq<CR>
 map <F3> <esc>:q<CR>
 map! <F9> <esc>:wq<CR>
 map! <F3> <esc>:q<CR>
-map <F2> <esc>:setlocal spell spelllang=en_us<CR>
 
 " Easy split navigation vimbits
 nnoremap <C-h> <C-w>h
@@ -144,51 +146,93 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Favour visual lines instead of real lines while moving up-down
+nnoremap k gk
+nnoremap j gj
+
+" Bind new set of commands with leader binding
+let mapleader=","
+map <Leader>d <esc>:tabprevious<CR> 
+map <Leader>f <esc>:tabnext<CR> 
+
+" Clear search highlight
+noremap <Leader>c		:nohlsearch<CR>
+
 " Spell check highlight set underline
+map <F2> <esc>:setlocal spell spelllang=en_us<CR>
 highlight clear SpellBad
 highlight SpellBad term=standout ctermfg=1 term=underline cterm=underline
-" Following settings are mostly Pythonic
-" Indentation settings for using 2 spaces instead of tabs.
-" Do not change 'tabstop' from its default value of 8 with this setup.
+
+"""""""""""""""""""""""""""""""""""""""
+" Python related settings 
+"""""""""""""""""""""""""""""""""""""""
 set softtabstop=4
-"set tabstop=2
-" Special tab spaces for python files
-autocmd FileType * set tabstop=2|set shiftwidth=2|set noexpandtab
-autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
+
+
 " Do shift-tab in python mode to insert real tab
 inoremap <S-Tab> <C-V><Tab>
 
+" Document width, last colomn color
 set tw=79 "document width
 set nowrap "dont wrap on load
 set fo-=t "dont wrap while typing
 set colorcolumn=80
 highlight ColorColumn ctermbg=233
 
+
+"""""""""""""""""""""""""""""""""""""""
+" Plugin Management 
+"""""""""""""""""""""""""""""""""""""""
 " Let pathogen handle the plugins
 call pathogen#infect()
 
-" ============================================================================
-" Python IDE Setup
-" ============================================================================
-" Settings for vim-powerline
+"""""""""""""""""""""""""""""""""""""""
+" General Purpose Plugins 
+"""""""""""""""""""""""""""""""""""""""
+" Undo tree visualization and selection
+" git clone http://github.com/sjl/gundo.vim.git ~/.vim/bundle/gundo
+nnoremap <F6> :GundoToggle<CR>
+
+" Relative Line Number Toggling
+" cd ~/.vim/bundle && git clone git://github.com/jeffkreeftmeijer/vim-numbertoggle.git
+
+" The silver searcher
+" First, install ag via home-brew or apt-get
+" brew install the_silver_searcher
+" cd ~/.vim/bundle && git clone https://github.com/rking/ag.vim ag && vim
+" +Helptags
+nnoremap <Leader>a :Ag
+
+"""""""""""""""""""""""""""""""""""""""
+" Python IDE Setup Related Plugins
+"""""""""""""""""""""""""""""""""""""""
+" Settings for vim-powerline: the beautiful line at the bottom
 " cd ~/.vim/bundle
 " git clone git://github.com/Lokaltog/vim-powerline.git
 set laststatus=2
 
-
-" Settings for ctrlp
+" Settings for ctrlp: search and completion
 " cd ~/.vim/bundle
 " git clone https://github.com/kien/ctrlp.vim.git
+" max_hight, sort files in ttb order, open in new buffer, respect change in 
+" working directory within vim, use Ag for matching -- speeds up. Ag fast
 let g:ctrlp_max_height = 30
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+
+" Ignore searching following files. Put additinal patterns in .agignore file
 set wildignore+=*.pyc
 set wildignore+=*_build/*
 set wildignore+=*/coverage/*
+set wildignore+=.git/*
 
 " Settings for jedi-vim
 " cd ~/.vim/bundle
 " git clone git://github.com/davidhalter/jedi-vim.git
 let g:jedi#usages_command = "<leader>z"
-let g:jedi#popup_on_dot = 1
+let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
@@ -219,3 +263,6 @@ highlight Pmenu ctermbg=238 gui=bold
 " http://www.vim.org/scripts/download_script.php?src_id=5492
 set nofoldenable
 
+" Set modeline setting for this vimrc file. To fold comment nofoldable
+" set modelines=1
+" vim:foldmethod=marker:foldlevel=0
