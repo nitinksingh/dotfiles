@@ -115,6 +115,7 @@ augroup configcmds
 
 	" Special tab spaces for python files
 	autocmd FileType * set tabstop=2|set shiftwidth=2|set noexpandtab
+	autocmd FileType c set tabstop=2|set shiftwidth=2|set expandtab
 	autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
 augroup END
 """""""""""""""""""""""""""""""""""""""
@@ -232,7 +233,7 @@ set wildignore+=.git/*
 " cd ~/.vim/bundle
 " git clone git://github.com/davidhalter/jedi-vim.git
 let g:jedi#usages_command = "<leader>z"
-let g:jedi#popup_on_dot = 0
+let g:jedi#popup_on_dot = 1
 let g:jedi#popup_select_first = 0
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
