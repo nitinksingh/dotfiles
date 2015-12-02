@@ -6,10 +6,16 @@ bind -m vi-insert "\C-a.":beginning-of-line
 bind -m vi-insert "\C-e.":end-of-line
 bind -m vi-insert "\C-w.":backward-kill-word
 
+# Mac commandline colors
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
 # Export some variable names
 export VIMRC='~/.vimrc'
 export EDITOR='vim'
 export PS1='\[\033[0;32m\]\W \[\033[00m\]\$ '
+# Import localrc, if exists
+test -f ~/.localrc && source ~/.localrc
+
 # Some handy short-cuts
 alias ll='ls -lrt'
 alias la='ls -lrat'
@@ -33,7 +39,3 @@ alias gl='git pull'
 alias gd='git diff'
 alias glog='git log --oneline'
 alias gap='git add *.py'
-# Import local shortcuts
-source ~/.localrc
-source ~/.tmuxinator/tmuxinator.bash
-
